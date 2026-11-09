@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5efe4">
+  <title>Private Admin | Wedding RSVPs &amp; Feedback</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&display=swap');
+
+    :root {
+      --paper: #f5efe4;
+      --paper-card: #fffaf3;
+      --ink: #59412f;
+      --muted: #8a7058;
+      --gold: #b18b57;
+      --green: #486847;
+      --line: rgba(111, 81, 53, .35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 50% 25%, #fffaf1, transparent 60%), linear-gradient(135deg, #f8f3ea, #eee4d5);
+      color: var(--ink);
+      font-family: "Cormorant Garamond", Georgia, serif;
+      padding: 30px 16px;
+    }
+
+    main {
+      width: min(820px, 100%);
+      margin: 3vh auto;
+      background: rgba(250, 246, 238, .85);
+      border: 1px solid var(--line);
+      outline: 1px solid rgba(142, 107, 70, .16);
+      outline-offset: 6px;
+      padding: clamp(24px, 6vw, 48px);
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 26px;
+    }
+
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      font-size: 13px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--ink);
+      text-decoration: underline;
+    }
+
+    .kicker {
+      text-transform: uppercase;
+      letter-spacing: .25em;
+      color: var(--muted);
+      font-size: 12px;
+      margin: 0 0 6px;
+    }
+
+    h1 {
+      font-weight: 500;
+      font-size: clamp(30px, 7vw, 44px);
+      margin: 6px 0;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 18px;
+      margin: 0 0 20px;
+    }
+
+    form {
+      display: grid;
+      gap: 14px;
+      max-width: 420px;
+      margin: 25px auto;
+    }
+
+    label {
+      font-size: 15px;
+      color: var(--muted);
+      text-align: left;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid var(--line);
+      background: var(--paper-card);
+      color: var(--ink);
+      font: 16px inherit;
+      margin-top: 6px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    button {
+      font: inherit;
+      cursor: pointer;
+      transition: background .2s, color .2s, opacity .2s;
+    }
+
+    .primary {
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: #fff8ed;
+      padding: 13px 20px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-size: 12px;
+    }
+
+    .primary:hover {
+      background: transparent;
+      color: var(--ink);
+    }
+
+    .secondary-btn {
+      border: 1px solid var(--line);
+      background: transparent;
+      color: var(--ink);
+      padding: 8px 14px;
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .secondary-btn:hover {
+      background: rgba(111, 81, 53, .08);
+    }
+
+    .status {
+      text-align: center;
+      color: var(--muted);
+      min-height: 22px;
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin: 24px 0;
+      text-align: center;
+    }
+
+    .stat-card {
+      border: 1px solid var(--line);
+      background: var(--paper-card);
+      padding: 14px 8px;
+    }
+
+    .stat-num {
+      font-size: 26px;
+      font-weight: 600;
+      display: block;
+      color: var(--ink);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--muted);
+    }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 20px 0 16px;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+    }
+
+    .action-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .feedback-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .feedback-item {
+      border: 1px solid var(--line);
+      padding: 18px;
+      background: var(--paper-card);
+      overflow-wrap: anywhere;
+      position: relative;
+    }
+
+    .item-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      border-bottom: 1px solid rgba(111, 81, 53, .12);
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
+
+    .guest-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 10px;
+      font-size: 12px;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      border-radius: 2px;
+    }
+
+    .badge-yes {
+      background: rgba(72, 104, 71, .14);
+      color: var(--green);
+      border: 1px solid rgba(72, 104, 71, .3);
+    }
+
+    .badge-no {
+      background: rgba(142, 67, 55, .1);
+      color: #8e4337;
+      border: 1px solid rgba(142, 67, 55, .25);
+    }
+
+    .feedback-item p {
+      white-space: pre-wrap;
+      line-height: 1.5;
+      margin: 8px 0;
+      font-size: 16px;
+    }
+
+    .stars-text {
+      color: var(--gold);
+      font-size: 15px;
+      letter-spacing: 2px;
+    }
+
+    .item-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 14px;
+      padding-top: 8px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .delete {
+      border: 1px solid #a55b4d;
+      color: #8e4337;
+      background: transparent;
+      padding: 6px 12px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .delete:hover {
+      background: #8e4337;
+      color: #fff;
+    }
+
+    .source-tag {
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      opacity: .8;
+    }
+
+    details.sql-guide {
+      margin-top: 32px;
+      border: 1px dashed var(--line);
+      padding: 14px;
+      background: rgba(255, 255, 255, .5);
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    details.sql-guide summary {
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--ink);
+    }
+
+    details.sql-guide pre {
+      background: #f1ebd9;
+      padding: 10px;
+      overflow-x: auto;
+      font-size: 12px;
+      margin-top: 8px;
+      border: 1px solid rgba(111, 81, 53, .2);
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    @media(max-width:520px) {
+      body {
+        padding: 16px 10px;
+      }
+
+      main {
+        margin: 2vh auto;
+        padding: 20px 14px;
+      }
+
+      .stats-bar {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <header>
+      <nav class="nav-links" aria-label="Page navigation">
+        <a href="invite.html">← View Invitation</a>
+        <span>·</span>
+        <a href="index.html">Home Hub</a>
+      </nav>
+      <p class="kicker">Fahad &amp; Nesrin · Private Area</p>
+      <h1>Guest RSVP &amp; Feedback</h1>
+      <p class="subtitle">Administrator sign-in</p>
+    </header>
+
+    <form id="loginForm">
+      <label>Admin email
+        <input id="email" type="email" autocomplete="username" required placeholder="admin@example.com">
+      </label>
+      <label>Password
+        <input id="password" type="password" autocomplete="current-password" required
+          placeholder="Enter your Supabase password">
+      </label>
+      <button class="primary" id="loginButton" type="submit">Sign in</button>
+      <div class="status" id="loginStatus" role="status" aria-live="polite"></div>
+    </form>
+
+    <section id="dashboard" hidden>
+      <div class="toolbar">
+        <div class="action-group">
+          <button class="secondary-btn" id="refreshButton" type="button">↻ Refresh</button>
+          <button class="secondary-btn" id="exportButton" type="button">⬇ Export CSV</button>
+        </div>
+        <button class="primary" id="logoutButton" type="button">Log out</button>
+      </div>
+
+      <div class="stats-bar">
+        <div class="stat-card">
+          <span class="stat-num" id="statTotal">0</span>
+          <span class="stat-label">Total Responses</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="statAttending" style="color: var(--green);">0</span>
+          <span class="stat-label">Attending</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="statDeclined" style="color: #8e4337;">0</span>
+          <span class="stat-label">Not Attending</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-num" id="statRating" style="color: var(--gold);">—</span>
+          <span class="stat-label">Avg Rating</span>
+        </div>
+      </div>
+
+      <h2>Attendance Responses &amp; Wishes</h2>
+      <div class="feedback-list" id="rsvpList"></div>
+
+      <details class="sql-guide">
+        <summary>⚙️ Supabase security setup</summary>
+        <p>Run the supplied setup.sql file in the new Supabase project's SQL Editor. Guest submissions are public,
+          but viewing and deleting responses require the authorized Supabase admin account.</p>
+      </details>
+    </section>
+  </main>
+
+  <script src="config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = window.WEDDING_SUPABASE_CONFIG?.url;
+    const SUPABASE_ANON_KEY = window.WEDDING_SUPABASE_CONFIG?.publishableKey;
+    const ADMIN_EMAIL = "fahadnrfahad@gmail.com";
+    const loginForm = document.getElementById("loginForm");
+    const loginStatus = document.getElementById("loginStatus");
+    const dashboard = document.getElementById("dashboard");
+    const rsvpList = document.getElementById("rsvpList");
+    const pageSubtitle = document.querySelector(".subtitle");
+    let db = null;
+    let currentRsvps = [];
+
+    if (SUPABASE_URL && SUPABASE_ANON_KEY && window.supabase?.createClient) {
+      db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    } else {
+      loginStatus.textContent = "Supabase configuration is missing. Check config.js.";
+    }
+
+    function setAdminState(isLoggedIn) {
+      loginForm.hidden = isLoggedIn;
+      dashboard.hidden = !isLoggedIn;
+      if (pageSubtitle) pageSubtitle.textContent = isLoggedIn
+        ? "Response & Attendance Overview" : "Administrator sign-in";
+      if (isLoggedIn) loadRsvps();
+    }
+
+    async function checkSession() {
+      if (!db) return;
+      const { data, error } = await db.auth.getSession();
+      if (error) { loginStatus.textContent = error.message; return; }
+      const session = data.session;
+      if (session && session.user?.email?.toLowerCase() === ADMIN_EMAIL) {
+        setAdminState(true);
+      } else {
+        if (session) await db.auth.signOut();
+        setAdminState(false);
+      }
+    }
+    checkSession();
+
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      if (!db) return;
+      const email = document.getElementById("email").value.trim().toLowerCase();
+      const password = document.getElementById("password").value;
+      if (email !== ADMIN_EMAIL) {
+        loginStatus.textContent = "This email is not authorized for the admin dashboard.";
+        return;
+      }
+      loginStatus.textContent = "Signing in...";
+      const { data, error } = await db.auth.signInWithPassword({ email, password });
+      if (error || !data.session) {
+        loginStatus.textContent = error?.message || "Sign-in failed.";
+        return;
+      }
+      setAdminState(true);
+      loginStatus.textContent = "";
+    });
+
+    async function loadRsvps() {
+      if (!db) return;
+      rsvpList.replaceChildren();
+      const loading = document.createElement("p");
+      loading.textContent = "Loading responses...";
+      rsvpList.appendChild(loading);
+      const { data, error } = await db.from("wedding_rsvps")
+        .select("id, guest_name, attending, message, rating, created_at")
+        .order("created_at", { ascending: false });
+      if (error) {
+        rsvpList.replaceChildren();
+        const p = document.createElement("p");
+        p.textContent = "Could not load responses: " + error.message;
+        rsvpList.appendChild(p);
+        return;
+      }
+
+      currentRsvps = data || [];
+      const yes = currentRsvps.filter(x => x.attending === true).length;
+      const no = currentRsvps.filter(x => x.attending === false).length;
+      const ratings = currentRsvps.filter(x => x.rating != null)
+        .map(x => Number(x.rating)).filter(Number.isFinite);
+      document.getElementById("statTotal").textContent = currentRsvps.length;
+      document.getElementById("statAttending").textContent = yes;
+      document.getElementById("statDeclined").textContent = no;
+      document.getElementById("statRating").textContent = ratings.length
+        ? (ratings.reduce((a, b) => a + b, 0) / ratings.length).toFixed(1) + " ★" : "—";
+
+      rsvpList.replaceChildren();
+      if (!currentRsvps.length) {
+        const p = document.createElement("p");
+        p.textContent = "No RSVP responses yet.";
+        rsvpList.appendChild(p);
+        return;
+      }
+
+      currentRsvps.forEach(item => {
+        const card = document.createElement("article");
+        card.className = "feedback-item";
+        const head = document.createElement("div");
+        head.className = "item-head";
+        const name = document.createElement("span");
+        name.className = "guest-title";
+        name.textContent = item.guest_name || "Guest";
+        const badge = document.createElement("span");
+        badge.className = "badge " + (item.attending ? "badge-yes" : "badge-no");
+        badge.textContent = item.attending ? "✓ Attending" : "✕ Not attending";
+        head.append(name, badge);
+
+        const body = document.createElement("div");
+        if (item.rating != null) {
+          const stars = document.createElement("div");
+          stars.className = "stars-text";
+          const n = Math.max(1, Math.min(5, Number(item.rating)));
+          stars.textContent = "★".repeat(n) + "☆".repeat(5 - n) + " (" + n + "/5)";
+          body.appendChild(stars);
+        }
+        if (item.message) {
+          const msg = document.createElement("p");
+          msg.textContent = item.message;
+          body.appendChild(msg);
+        }
+
+        const footer = document.createElement("div");
+        footer.className = "item-footer";
+        const date = document.createElement("span");
+        date.textContent = item.created_at ? new Date(item.created_at).toLocaleString() : "";
+        const del = document.createElement("button");
+        del.className = "delete";
+        del.type = "button";
+        del.textContent = "Delete RSVP";
+        del.addEventListener("click", async () => {
+          if (!confirm(`Permanently delete the response from "${item.guest_name}"?`)) return;
+          del.disabled = true;
+          const { error: deleteError } = await db.from("wedding_rsvps").delete().eq("id", item.id);
+          if (deleteError) {
+            alert("Delete failed: " + deleteError.message);
+            del.disabled = false;
+          } else {
+            await loadRsvps();
+          }
+        });
+        footer.append(date, del);
+        card.append(head, body, footer);
+        rsvpList.appendChild(card);
+      });
+    }
+
+    document.getElementById("refreshButton").addEventListener("click", loadRsvps);
+    document.getElementById("exportButton").addEventListener("click", () => {
+      if (!currentRsvps.length) return alert("No RSVPs to export yet.");
+      const headers = ["Guest Name", "Attending", "Rating", "Wishes / Message", "Date"];
+      const quote = value => '"' + String(value ?? "").replace(/"/g, '""') + '"';
+      const rows = currentRsvps.map(x => [
+        quote(x.guest_name), quote(x.attending ? "Yes" : "No"),
+        quote(x.rating == null ? "" : `${x.rating}/5`), quote(x.message),
+        quote(x.created_at ? new Date(x.created_at).toLocaleString() : "")
+      ]);
+      const csv = "\uFEFF" + [headers.map(quote).join(","), ...rows.map(r => r.join(","))].join("\r\n");
+      const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `wedding_rsvps_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+    document.getElementById("logoutButton").addEventListener("click", async () => {
+      if (db) await db.auth.signOut();
+      document.getElementById("password").value = "";
+      setAdminState(false);
+      loginStatus.textContent = "You have signed out.";
+    });
+  </script>
+</body>
+
+</html>
